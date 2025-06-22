@@ -3,8 +3,8 @@
 # Configuración
 FECHA=$(date +"%Y-%m-%d_%H-%M-%S")
 NOMBRE_BACKUP="backup_${FECHA}.zip"
-ORIGEN="/home/tomas/minecraft/worlds"
-DESTINO="/home/tomas/minecraft/backups"
+ORIGEN="/home/mineraft/bedrock-server/bedrock-server/minecraft/worlds"
+DESTINO="/home/mineraft/bedrock-server/bedrock-server/minecraft/backups"
 
 # Crear carpeta de backups si no existe
 mkdir -p "$DESTINO"

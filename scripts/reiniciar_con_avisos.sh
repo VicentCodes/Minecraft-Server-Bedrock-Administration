@@ -26,5 +26,5 @@ screen -S "$SERVER_SCREEN" -p 0 -X stuff "save-all$(printf \\r)"
 screen -S "$SERVER_SCREEN" -p 0 -X stuff "stop$(printf \\r)"
 sleep 5
 
-cd /home/tomas/minecraft
+cd /home/mineraft/bedrock-server/bedrock-server/minecraft
 screen -dmS "$SERVER_SCREEN" ./bedrock_server

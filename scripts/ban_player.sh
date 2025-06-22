@@ -1,8 +1,8 @@
 #!/bin/bash
 
 PLAYER="$1"
-BANLIST="/home/tomas/minecraft/ban-list.json"
-ALLOWLIST="/home/tomas/minecraft/allowlist.json"
+BANLIST="/home/mineraft/bedrock-server/bedrock-server/minecraft/ban-list.json"
+ALLOWLIST="/home/mineraft/bedrock-server/bedrock-server/minecraft/allowlist.json"
 
 if [ -z "$PLAYER" ]; then
   echo "❌ ERROR: Nombre de jugador requerido"
