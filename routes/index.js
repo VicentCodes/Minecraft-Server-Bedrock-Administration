@@ -216,7 +216,7 @@ router.post('/jugabilidad/guardar', (req, res) => {
   }
 
   // Validar si el mundo existe físicamente
-  const worldPath = path.join('/home/tomas/minecraft/worlds', cambios['level-name']);
+  const worldPath = path.join('/home/mineraft/bedrock-server/bedrock/minecraft/worlds', cambios['level-name']);
   if (!fs.existsSync(worldPath)) {
     console.warn(`⚠ El mundo '${cambios['level-name']}' no existe. Restaurando a 'bedrock_server'.`);
     cambios['level-name'] = 'bedrock_server';
@@ -323,26 +323,26 @@ router.post('/server/send-message', (req, res) => {
 
 
 router.post('/server/shutdown', (req, res) => {
-  exec('bash /home/tomas/minecraft-admin/scripts/apagar_con_avisos.sh', () => {
+  exec('bash /home/minecraft/minecraft-admin/scripts/apagar_con_avisos.sh', () => {
     res.redirect('/panel/server');
   });
 });
 
 router.post('/server/restart', (req, res) => {
-  exec('bash /home/tomas/minecraft-admin/scripts/reiniciar_con_avisos.sh', () => {
+  exec('bash /home/minecraft/minecraft-admin/scripts/reiniciar_con_avisos.sh', () => {
     res.redirect('/panel/server');
   });
 });
 
 router.post('/server/backup', (req, res) => {
-  exec('bash /home/tomas/minecraft-admin/scripts/backup_manual.sh', () => {
+  exec('bash /home/minecraft/minecraft-admin/scripts/backup_manual.sh', () => {
     res.redirect('/panel/server');
   });
 });
 
 router.post('/server/backup-toggle', (req, res) => {
   const habilitar = req.body.habilitar === 'true';
-  const cronLinea = '0 0 * * * /home/tomas/minecraft-admin/scripts/backup_manual.sh';
+  const cronLinea = '0 0 * * * /home/minecraft/minecraft-admin/scripts/backup_manual.sh';
 
   exec('crontab -l', (err, stdout) => {
     let lineas = stdout.split('\n').filter(l => l.trim() !== '');
@@ -361,7 +361,7 @@ router.post('/server/backup-toggle', (req, res) => {
 
 router.post('/server/restore-backup', (req, res) => {
   const backup = req.body.filename;
-  const script = '/home/tomas/minecraft-admin/scripts/restaurar_backup.sh';
+  const script = '/home/minecraft/minecraft-admin/scripts/restaurar_backup.sh';
   execFile(script, [backup], (error) => {
     if (error) console.error(error);
     res.redirect('/panel/server');
@@ -379,7 +379,7 @@ router.post('/server/save-messages', (req, res) => {
 
 
 router.post('/server/poweroff', (req, res) => {
-  exec('sudo /home/tomas/minecraft-admin/scripts/apagar_pc.sh', () => {
+  exec('sudo /home/minecraft/minecraft-admin/scripts/apagar_pc.sh', () => {
     res.send('La máquina se está apagando...');
   });
 });
@@ -389,7 +389,7 @@ router.post('/server/poweroff', (req, res) => {
 // Encender el servidor Minecraft
 // Encender el servidor Minecraft
 router.post('/server/start', (req, res) => {
-  const comando = 'screen -dmS minecraft_server bash -c "cd /home/tomas/minecraft && mkdir -p logs && LD_LIBRARY_PATH=. ./bedrock_server"';
+  const comando = 'screen -dmS minecraft_server bash -c "cd /home/minecraft/minecraft && mkdir -p logs && LD_LIBRARY_PATH=. ./bedrock_server"';
 
   require('child_process').exec(comando, (error, stdout, stderr) => {
     if (error) {
@@ -437,7 +437,7 @@ router.post('/server/stop', (req, res) => {
 
 
 router.get('/', (req, res) => {
-  const script = '/home/tomas/minecraft-admin/scripts/leer_conectados.sh';
+  const script = '/home/minecraft/minecraft-admin/scripts/leer_conectados.sh';
   const tempPath = '/tmp/jugadores_activos.txt';
 
   execFile(script, () => {

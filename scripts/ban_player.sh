@@ -22,5 +22,5 @@ if grep -q "\"name\": \"$PLAYER\"" "$ALLOWLIST"; then
 fi
 
 # Expulsar
-SCRIPT="/home/tomas/minecraft-admin/scripts/kick_player.sh"
+SCRIPT="/home/minecraft/minecraft-admin/scripts/kick_player.sh"
 bash "$SCRIPT" "$PLAYER" "Fuiste baneado"
