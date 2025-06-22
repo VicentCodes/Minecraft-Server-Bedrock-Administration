@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="/panel/css/panel.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="main-header">
+    <h1><span class="material-icons-outlined">dashboard</span> Panel de Minecraft 2</h1>
+  </header>
+
+  <main class="panel-container">
+    <section class="panel-status">
+      <h2><span class="material-icons-outlined">wifi</span> Jugadores conectados</h2>
+      <div class="panel-card status-card">
+        <ul class="players-list">
+          <% if (jugadoresActivos && jugadoresActivos.length > 0) { %>
+            <% jugadoresActivos.forEach(jugador => { %>
+              <li><%= jugador %></li>
+            <% }) %>
+          <% } else { %>
+            <li><em>No hay jugadores conectados.</em></li>
+          <% } %>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel-menu">
+      <div class="panel-card jugabilidad">
+        <span class="material-icons-outlined">settings</span>
+        <h3>Jugabilidad</h3>
+        <a href="/panel/jugabilidad"><button>Configurar</button></a>
+      </div>
+
+      <div class="panel-card jugadores">
+        <span class="material-icons-outlined">group</span>
+        <h3>Jugadores</h3>
+        <a href="/panel/players"><button>Gestionar</button></a>
+      </div>
+
+      <div class="panel-card roles">
+        <span class="material-icons-outlined">vpn_key</span>
+        <h3>Roles</h3>
+        <a href="/panel/roles"><button>Editar</button></a>
+      </div>
+
+      <div class="panel-card servidor">
+        <span class="material-icons-outlined">dns</span>
+        <h3>Servidor</h3>
+        <a href="/panel/server"><button>Controlar</button></a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

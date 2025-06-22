@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Modificar Jugabilidad</title>
+  <link rel="stylesheet" href="/panel/css/styles.css">
+</head>
+<body>
+
+  <h1>Modificar Jugabilidad</h1>
+
+  <form action="/panel/jugabilidad/guardar" method="POST">
+    <table>
+      <tr>
+        <th>Configuración</th>
+        <th>Valor actual</th>
+        <th>Sugerencia / Límite</th>
+      </tr>
+
+      <!-- Dificultad -->
+      <tr>
+        <td><label for="difficulty">Dificultad</label></td>
+        <td>
+          <select name="difficulty" id="difficulty">
+            <option value="peaceful" <%= config.difficulty === 'peaceful' ? 'selected' : '' %>>Peaceful</option>
+            <option value="easy" <%= config.difficulty === 'easy' ? 'selected' : '' %>>Easy</option>
+            <option value="normal" <%= config.difficulty === 'normal' ? 'selected' : '' %>>Normal</option>
+            <option value="hard" <%= config.difficulty === 'hard' ? 'selected' : '' %>>Hard</option>
+          </select>
+        </td>
+        <td>Elige según el nivel de reto</td>
+      </tr>
+
+      <!-- Max players -->
+      <tr>
+        <td><label for="max-players">Máximo de jugadores</label></td>
+        <td>
+          <input type="number" name="max-players" id="max-players" min="1" max="30" value="<%= config['max-players'] || 10 %>">
+        </td>
+        <td>Mínimo 1, máximo 30</td>
+      </tr>
+
+      <!-- Tick Distance -->
+      <tr>
+        <td><label for="tick-distance">Distancia de simulación</label></td>
+        <td>
+          <input type="number" name="tick-distance" id="tick-distance" min="4" max="12" value="<%= config['tick-distance'] || 6 %>">
+        </td>
+        <td>Recomendado entre 4 y 12</td>
+      </tr>
+
+      <!-- View Distance -->
+      <tr>
+        <td><label for="view-distance">Distancia de visión</label></td>
+        <td>
+          <input type="number" name="view-distance" id="view-distance" min="4" max="32" value="<%= config['view-distance'] || 10 %>">
+        </td>
+        <td>Máximo permitido: 32</td>
+      </tr>
+
+      <!-- Level Name -->
+      <tr>
+        <td><label for="level-name">Nombre del mundo</label></td>
+        <td>
+          <input type="text" name="level-name" id="level-name" value="<%= config['level-name'] || '' %>">
+        </td>
+        <td>Nombre de la carpeta del mundo</td>
+      </tr>
+
+      <!-- PvP -->
+      <tr>
+        <td><label for="pvp">PvP entre jugadores</label></td>
+        <td>
+          <select name="pvp" id="pvp">
+            <option value="true" <%= config.pvp === 'true' ? 'selected' : '' %>>Activado</option>
+            <option value="false" <%= config.pvp === 'false' ? 'selected' : '' %>>Desactivado</option>
+          </select>
+        </td>
+        <td>Activa o desactiva el combate entre jugadores</td>
+      </tr>
+
+      <!-- Nether -->
+      <tr>
+        <td><label for="allow-nether">Nether activado</label></td>
+        <td>
+          <select name="allow-nether" id="allow-nether">
+            <option value="true" <%= config['allow-nether'] === 'true' ? 'selected' : '' %>>Activado</option>
+            <option value="false" <%= config['allow-nether'] === 'false' ? 'selected' : '' %>>Desactivado</option>
+          </select>
+        </td>
+        <td>Habilita los portales al Nether</td>
+      </tr>
+
+      <!-- Idle Timeout -->
+      <tr>
+        <td><label for="player-idle-timeout">Expulsión por inactividad</label></td>
+        <td>
+          <input type="number" name="player-idle-timeout" id="player-idle-timeout" min="0" max="32767" value="<%= config['player-idle-timeout'] || 0 %>">
+        </td>
+        <td>0 = desactivado. Valor en minutos</td>
+      </tr>
+
+    </table>
+
+    <br>
+    <button type="submit">Guardar configuración</button>
+  </form>
+
+</body>
+</html>

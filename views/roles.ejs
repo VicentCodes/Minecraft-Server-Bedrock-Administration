@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>🛡️ Gestión de Roles</title>
+  <link rel="stylesheet" href="/panel/css/styles.css">
+</head>
+<body>
+  <h1>🛡️ Gestión de Roles</h1>
+  <p>⚠️ Editar operadores desactiva logros. Solo visible desde aquí.</p>
+
+  <!-- Formulario para agregar un nuevo jugador con rol -->
+  <form action="/panel/roles/add" method="POST">
+    <label for="name">Nombre:</label>
+    <input type="text" name="name" required>
+
+    <label for="xuid">XUID:</label>
+    <input type="text" name="xuid" required>
+
+    <label for="permission">Rol:</label>
+    <select name="permission" required>
+      <option value="visitor">Visitante</option>
+      <option value="member">Miembro</option>
+      <option value="operator">Operador</option>
+    </select>
+
+    <button type="submit">➕ Agregar</button>
+  </form>
+
+  <!-- Tabla de jugadores con roles -->
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>XUID</th>
+        <th>Rol Actual</th>
+        <th>Cambiar Rol</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (permisos.length === 0) { %>
+        <tr><td colspan="4">No hay jugadores con permisos asignados aún.</td></tr>
+      <% } else { %>
+        <% permisos.forEach(p => { %>
+          <tr>
+            <td><%= p.name %></td>
+            <td><%= p.xuid %></td>
+            <td><%= p.permission %></td>
+            <td>
+              <form action="/panel/roles/update" method="POST" style="display:flex; gap:5px;">
+                <input type="hidden" name="name" value="<%= p.name %>">
+                <input type="hidden" name="xuid" value="<%= p.xuid %>">
+                <select name="permission">
+                  <option value="visitor" <%= p.permission === 'visitor' ? 'selected' : '' %>>Visitante</option>
+                  <option value="member" <%= p.permission === 'member' ? 'selected' : '' %>>Miembro</option>
+                  <option value="operator" <%= p.permission === 'operator' ? 'selected' : '' %>>Operador</option>
+                </select>
+                <button type="submit">💾 Guardar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</body>
+</html>

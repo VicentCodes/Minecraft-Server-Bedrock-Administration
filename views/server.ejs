@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión del Servidor Minecraft</title>
+  <link rel="stylesheet" href="/panel/css/styles.css">
+</head>
+<body>
+  <h1>📡 Panel de Gestión del Servidor Minecraft</h1>
+
+  <!-- Estado actual del servidor -->
+  <div style="margin-bottom: 20px;">
+    <strong>Estado del servidor:</strong>
+    <% if (serverEncendido) { %>
+      <span style="color: green;">🟢 Encendido</span>
+    <% } else { %>
+      <span style="color: red;">🔴 Apagado</span>
+    <% } %>
+  </div>
+
+  <% if (!serverEncendido) { %>
+  <section>
+    <h2>🔌 Encender Servidor</h2>
+    <form action="/panel/server/start" method="POST">
+      <button type="submit">Encender Servidor</button>
+    </form>
+  </section>
+  <% } else { %>
+  <section>
+    <h2>⏱️ Apagar Ahora con Cuenta Regresiva</h2>
+    <form action="/panel/server/stop" method="POST" onsubmit="return confirm('El servidor se apagará en 10 segundos. ¿Continuar?')">
+      <button type="submit">Apagar Ahora</button>
+    </form>
+  </section>
+  <% } %>
+
+  <section>
+    <h2>📨 Enviar Mensaje al Servidor</h2>
+    <form action="/panel/server/send-message" method="POST">
+      <input type="text" name="mensaje" placeholder="Mensaje" required>
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>🛑 Apagar y 🔁 Reiniciar con Aviso Progresivo</h2>
+    <form action="/panel/server/shutdown" method="POST" style="display:inline">
+      <button type="submit">Apagar con Aviso</button>
+    </form>
+    <form action="/panel/server/restart" method="POST" style="display:inline">
+      <button type="submit">Reiniciar con Aviso</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>💾 Backup Manual</h2>
+    <form action="/panel/server/backup" method="POST">
+      <button type="submit">Generar Backup</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>📂 Backups Disponibles</h2>
+    <ul>
+      <% backups.forEach(b => { %>
+        <li>
+          <%= b %>
+          <form action="/panel/server/restore-backup" method="POST" style="display:inline">
+            <input type="hidden" name="filename" value="<%= b %>">
+            <button type="submit" onclick="return confirm('¿Restaurar este backup?')">Restaurar</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🕛 Backup Automático</h2>
+    <% if (cronActivo) { %>
+      <p>🟢 Cronjob activo</p>
+    <% } else { %>
+      <p>🔴 Cronjob inactivo</p>
+    <% } %>
+    <form action="/panel/server/backup-toggle" method="POST">
+      <input type="hidden" name="habilitar" value="<%= !cronActivo %>">
+      <button type="submit">
+        <% if (cronActivo) { %> Desactivar <% } else { %> Activar <% } %> Backup Automático
+      </button>
+    </form>
+  </section>
+
+  <section>
+    <h2>💬 Mensajes Automáticos</h2>
+    <form action="/panel/server/save-messages" method="POST">
+      <h3>Mensaje de Bienvenida</h3>
+      <textarea name="bienvenida" rows="2"><%= mensajes.bienvenida || '' %></textarea>
+
+      <h3>Mensaje de Noticias</h3>
+      <textarea name="noticias" rows="2"><%= mensajes.noticias || '' %></textarea>
+
+      <h3>Mensaje de Despedida</h3>
+      <textarea name="despedida" rows="2"><%= mensajes.despedida || '' %></textarea>
+
+      <button type="submit">Guardar Mensajes</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>🖥️ Apagar la PC por completo</h2>
+    <form action="/panel/server/poweroff" method="POST" onsubmit="return confirm('¿Apagar por completo la PC?')">
+      <button type="submit">Apagar PC</button>
+    </form>
+  </section>
+</body>
+</html>

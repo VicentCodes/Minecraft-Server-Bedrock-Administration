@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Jugadores</title>
+  <link rel="stylesheet" href="/panel/css/styles.css">
+</head>
+<body>
+  <h1>🧩 Gestión de Jugadores Permitidos</h1>
+
+  <!-- Formulario para agregar nuevo jugador -->
+  <form action="/panel/players/add" method="POST">
+    <input type="text" name="name" placeholder="Nombre de jugador" required>
+    <label>
+      <input type="checkbox" name="ignoresPlayerLimit"> Ignora límite de jugadores
+    </label>
+    <button type="submit">Agregar jugador</button>
+  </form>
+
+  <h2>🎮 Lista de Jugadores Activos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>XUID</th>
+        <th>Ignora Límite</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% jugadores.forEach(j => { %>
+        <% const estaBaneado = baneados.find(b => b.name === j.name); %>
+        <tr class="<%= !j.xuid ? 'nuevo' : '' %>">
+          <td><%= j.name %></td>
+          <td><%= j.xuid || '⚠️ No ha ingresado' %></td>
+          <td><%= j.ignoresPlayerLimit ? '✅' : '❌' %></td>
+          <td><%= estaBaneado ? 'Baneado' : (!j.xuid ? 'Nuevo jugador' : 'Activo') %></td>
+          <td>
+            <!-- Cambiar ignoresPlayerLimit -->
+            <form action="/panel/players/edit/<%= j.name %>" method="POST" style="display:inline;">
+              <input type="hidden" name="ignoresPlayerLimit" value="<%= !j.ignoresPlayerLimit %>">
+              <button type="submit">✏️ Cambiar límite</button>
+            </form>
+
+            <!-- Eliminar jugador (solo de allowlist, no ban) -->
+            <form action="/panel/players/delete/<%= j.name %>" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar a <%= j.name %>?');">
+              <button type="submit">🗑️ Eliminar</button>
+            </form>
+
+            <!-- Expulsar jugador -->
+            <form action="/panel/players/kick/<%= j.name %>" method="POST" style="display:inline;">
+              <input type="hidden" name="message" value="Fuiste expulsado por un administrador. Vuelve a iniciar sesión.">
+              <button type="submit">🚫 Expulsar</button>
+            </form>
+
+            <!-- Ban/Unban -->
+            <button data-player="<%= j.name %>" data-baneado="<%= !!estaBaneado %>" onclick="abrirModalDesdeAtributo(this)">
+              <%= estaBaneado ? '✅ Desbloquear' : '⛔ Bloquear' %>
+            </button>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <h2>⛔ Jugadores Baneados</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% baneados.forEach(b => {
+        const activo = jugadores.find(j => j.name === b.name);
+        if (!activo) { %>
+          <tr>
+            <td><%= b.name %></td>
+            <td>
+              <form action="/panel/players/unban/<%= b.name %>" method="POST">
+                <button type="submit">➕ Restaurar</button>
+              </form>
+            </td>
+          </tr>
+      <% }}) %>
+    </tbody>
+  </table>
+
+  <!-- Modal -->
+  <div id="modal-confirm" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-title">¿Estás seguro?</h3>
+      <form id="modal-form" method="POST" action="">
+        <button type="submit">Confirmar</button>
+        <button type="button" onclick="closeModal()">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalDesdeAtributo(btn) {
+      const player = btn.getAttribute('data-player');
+      const estaBaneado = btn.getAttribute('data-baneado') === 'true';
+      openModal(player, estaBaneado);
+    }
+
+    function openModal(player, estaBaneado) {
+      const modal = document.getElementById('modal-confirm');
+      const form = document.getElementById('modal-form');
+      const title = document.getElementById('modal-title');
+      modal.style.display = 'block';
+      const ruta = estaBaneado ? `/panel/players/unban/${player}` : `/panel/players/ban/${player}`;
+      form.action = ruta;
+      title.textContent = estaBaneado ? `¿Desbloquear a ${player}?` : `¿Bloquear a ${player}?`;
+    }
+
+    function closeModal() {
+      document.getElementById('modal-confirm').style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+      const modal = document.getElementById('modal-confirm');
+      if (event.target === modal) modal.style.display = 'none';
+    };
+  </script>
+</body>
+</html>
