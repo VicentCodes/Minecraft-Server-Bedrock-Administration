@@ -388,16 +388,19 @@ router.post('/server/poweroff', (req, res) => {
 // Encender el servidor Minecraft
 // Encender el servidor Minecraft
 // Encender el servidor Minecraft
+// Encender el servidor Minecraft Bedrock
 router.post('/server/start', (req, res) => {
-  const comando = 'screen -dmS minecraft_server bash -c "cd /home/minecraft/minecraft && mkdir -p logs && LD_LIBRARY_PATH=. ./bedrock_server"';
+  const comando = 'screen -dmS minecraft_server bash -c "cd /home/mineraft/bedrock-server/bedrock-server && LD_LIBRARY_PATH=. ./bedrock_server"';
 
   require('child_process').exec(comando, (error, stdout, stderr) => {
     if (error) {
       console.error('Error al iniciar el servidor:', error.message);
+      return res.status(500).send('Error al iniciar el servidor');
     }
     res.redirect('/panel/server');
   });
 });
+
 
 
 router.post('/server/stop', (req, res) => {

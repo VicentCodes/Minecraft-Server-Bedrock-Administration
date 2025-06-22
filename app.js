@@ -17,7 +17,7 @@ app.use('/panel', express.static(path.join(__dirname, 'public')));
 app.use('/panel', indexRouter);
 
 // Puerto del servidor
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => {
   console.log(`Servidor activo en http://localhost:${PORT}/panel/players`);
 });
